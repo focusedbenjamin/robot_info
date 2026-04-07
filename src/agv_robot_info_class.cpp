@@ -1,13 +1,13 @@
 #include <ros/ros.h>
 #include <robotinfo_msgs/RobotInfo10Fields.h>
-
-// Include base class
 #include "robot_info_class.cpp"
+#include "hydraulic_system_monitor.cpp"
 
 class AGVRobotInfo : public RobotInfo
 {
 private:
     std::string maximum_payload;
+    HydraulicSystemMonitor hydraulic_monitor;
 
 public:
     AGVRobotInfo()
@@ -24,6 +24,9 @@ public:
         msg.data_field_03 = "ip_address: " + ip_address;
         msg.data_field_04 = "firmware_version: " + firmware_version;
         msg.data_field_05 = "maximum_payload: " + maximum_payload;
+        msg.data_field_06 = "hydraulic_oil_temperature: " + hydraulic_monitor.getOilTemperature();
+        msg.data_field_07 = "hydraulic_oil_tank_fill_level: " + hydraulic_monitor.getOilTankFillLevel();
+        msg.data_field_08 = "hydraulic_oil_pressure: " + hydraulic_monitor.getOilPressure();
 
         pub.publish(msg);
     }
